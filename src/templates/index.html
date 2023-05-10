@@ -1,0 +1,86 @@
+{% extends "base.html"  %}
+
+{% block content %}
+
+
+
+
+<div id="app">
+<div class="col-6 pt-5  mx-auto">
+<div class="text-center">
+<img src="https://img.rawpixel.com/s3fs-private/rawpixel_images/creative_room/v804-sasi-lifestylesticker-112_2.jpg?bg=transparent&con=3&cs=srgb&dpr=1&fm=jpg&ixlib=php-3.1.0&q=80&usm=15&vib=3&w=1300&s=a3fa6d5eb4233e9b7ca392ce92635226"
+style="height:200px" class="img-fluid img-reponsive text-center">
+
+<h4>Buy me a Coffee</h4>
+</div>
+
+    <form class="m" method="post" >
+        {% csrf_token %}
+        <div class="form-group pt-4">
+            <label for="exampleInputEmail1">Your name</label>
+            <input   name="name" value="aa" type="text" class="form-control"
+             id="exampleInputEmail1" aria-describedby="emailHelp">
+          </div>
+        <div class="form-group">
+          <label for="exampleInputEmail1">Enter Amount</label>
+          <input type="number" value="10" class="form-control" name="amount"
+           id="exampleInputEmail1" aria-describedby="emailHelp">
+          <small id="emailHelp" class="form-text text-muted">
+              Thanks for the coffee.</small>
+        </div>
+
+        <button class="btn btn-success btn-block" type="submit">Buy</button>
+        </form>
+    {% if payment %}
+        <div class="container mx-auto text-center mt-4" >
+            {{payment.id}}
+            <button id="rzp-button1">Pay</button>
+        </div>
+    {% endif %}
+</div>
+        
+
+
+</div>
+
+
+
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+var options = {
+    "key": "{{key}}", // Enter the Key ID generated from the Dashboard
+    "amount": "50", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+    "currency": "INR",
+    "name": "Acme Corp", //your business name
+    "description": "Test Transaction",
+    "image": "https://example.com/your_logo",
+    "order_id": "{{ payment.id }}", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+    "callback_url": "/success",
+    // "redirect":true,
+    "prefill": {
+        "name": "Gaurav Kumar", //your customer's name
+        "email": "gaurav.kumar@example.com",
+        "contact": "9000090000"
+    },
+    "notes": {
+        "address": "Razorpay Corporate Office"
+    },
+    "theme": {
+        "color": "#3399cc"
+    }
+};
+var rzp1 = new Razorpay(options);
+    document.getElementById('rzp-button1').onclick = function(e){
+    rzp1.open();
+    e.preventDefault();
+}
+</script>
+
+<style>
+body{
+    background :#f5f6f8;
+}
+
+</style>
+{% endblock %}
